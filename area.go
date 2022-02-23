@@ -62,10 +62,10 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 	}
 
 	if !math.IsNaN(AB) && !math.IsNaN(AC) && !math.IsNaN(BC) {
-		if AB >= 180 || AC >= 180 || BC >= 180 || AB+AC+BC != 360 {
+		if AB+AC+BC != 180 {
 			err = fmt.Errorf("No such triangle exists")
 		}
-	} else if AB >= 180 || AC >= 180 || BC >= 180 || AB+AC+BC > 360 {
+	} else if AB+AC+BC > 180 {
 		err = fmt.Errorf("No such triangle exists")
 	}
 
@@ -106,6 +106,7 @@ func area(a, b, c, AB, AC, BC float64) float64 {
 	if !math.IsNaN(AB) && !math.IsNaN(BC) && !math.IsNaN(b) {
 		return areaTWOAngle(AB, BC, b)
 	}
+
 	return math.NaN()
 }
 
