@@ -83,18 +83,16 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 	return
 }
 
-// ПО ПИФАГОРУ
-//
 func areaA(AC, b, c, S float64) float64 {
 	var h, x float64
 
 	if !math.IsNaN(AC) && !math.IsNaN(b) && !math.IsNaN(c) {
 		h = c * math.Sin((math.Pi*AC)/180)
-		if AC < 90 {
+		if AC <= 90 {
 			x = math.Sqrt(c*c-h*h) + math.Sqrt(b*b-h*h)
 			return (0.5 * x * h)
 		}
-		if AC >= 90 {
+		if AC > 90 {
 			x = math.Sqrt(b*b-h*h) - math.Sqrt(c*c-h*h)
 			return (0.5 * x * h)
 		}
@@ -126,8 +124,8 @@ func area(a, b, c, AB, AC, BC float64) (S float64) {
 	}
 
 	S = areaAngle(AB, a, b, S)
-	S = areaAngle(AB, a, c, S)
-	S = areaAngle(AB, b, c, S)
+	S = areaAngle(AC, a, c, S)
+	S = areaAngle(BC, b, c, S)
 
 	S = areaTWOAngle(AB, AC, a, S)
 	S = areaTWOAngle(AC, BC, c, S)
