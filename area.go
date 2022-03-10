@@ -1,10 +1,18 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
 )
+
+func n(s float64) float64 {
+	if math.IsNaN(s) {
+		return 0
+	}
+	return s
+}
 
 func inp(out string) (a float64, err error) {
 	var ai string
@@ -48,20 +56,26 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
+	return
+}
+
+func check(a, b, c, AB, AC, BC float64) error {
 	if a <= 0 || b <= 0 || c <= 0 || AB <= 0 || AC <= 0 || BC <= 0 {
-		err = fmt.Errorf("Value entered incorrectly")
+		return errors.New("value entered incorrectly")
+
 	}
 
 	if a+b <= c || a+c <= b || c+b <= a {
-		err = fmt.Errorf("No such triangle exists")
+		return errors.New("no such triangle exists")
 	}
 
 	if !math.IsNaN(AB) && !math.IsNaN(AC) && !math.IsNaN(BC) {
 		if AB+AC+BC != 180 {
-			err = fmt.Errorf("No such triangle exists")
+			return errors.New("no such triangle exists")
 		}
-	} else if AB+AC+BC > 180 {
-		err = fmt.Errorf("No such triangle exists")
+	} else if n(AB)+n(AC)+n(BC) >= 180 {
+		return errors.New("no such triangle exists")
+
 	}
 
 	if !math.IsNaN(AB) && !math.IsNaN(AC) {
@@ -73,14 +87,14 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 	}
 
 	if AC >= 90 && (b <= a || b <= c) {
-		err = fmt.Errorf("No such triangle exists")
+		return errors.New("no such triangle exists")
 	} else if AB >= 90 && (c <= a || c <= b) {
-		err = fmt.Errorf("No such triangle exists")
+		return errors.New("no such triangle exists")
 	} else if BC >= 90 && (a <= c || a <= b) {
-		err = fmt.Errorf("No such triangle exists")
+		return errors.New("no such triangle exists")
 	}
 
-	return
+	return nil
 }
 
 func areaA(AC, b, c, S float64) float64 {
@@ -116,11 +130,15 @@ func areaTWOAngle(AB, AC, a, S float64) float64 {
 	return S
 }
 
-func area(a, b, c, AB, AC, BC float64) (S float64) {
+func area(a, b, c, AB, AC, BC float64) (S float64, err error) {
+	err = check(a, b, c, AB, AC, BC)
+	if err != nil {
+		return
+	}
 	S = math.NaN()
 	if !math.IsNaN(a) && !math.IsNaN(b) && !math.IsNaN(c) {
 		p := (a + b + c) / 2
-		S = math.Sqrt(p * (p - a) * (p - b) * (p - c))
+		return math.Sqrt(p * (p - a) * (p - b) * (p - c)), nil
 	}
 
 	S = areaAngle(AB, a, b, S)
@@ -138,7 +156,7 @@ func area(a, b, c, AB, AC, BC float64) (S float64) {
 	S = areaA(AC, b, a, S)
 	S = areaA(BC, a, b, S)
 
-	return S
+	return
 }
 
 func main() {
@@ -148,13 +166,17 @@ func main() {
 	for !exit {
 		exit = true
 		if err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("ERROR:", err)
 			fmt.Printf("\nTry it again\n\n")
 			a, b, c, AB, AC, BC, err = input()
 			exit = false
 		}
 	}
-	S := area(a, b, c, AB, AC, BC)
+
+	S, err := area(a, b, c, AB, AC, BC)
+	if err != nil {
+		fmt.Println("ERROR:", err)
+	}
 	if !math.IsNaN(S) {
 		fmt.Printf("Area ≈ %.18f", S)
 	} else {
