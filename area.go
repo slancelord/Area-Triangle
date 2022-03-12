@@ -23,36 +23,56 @@ func inp(out string) (a float64, err error) {
 }
 
 func input() (a, b, c, AB, AC, BC float64, err error) {
+	k := 0.
+	c, AB, AC, BC = math.NaN(), math.NaN(), math.NaN(), math.NaN()
 
 	fmt.Println("If the side or angle is unknown, skip by writing `NaN`")
 
 	a, err = inp("a = ")
+	if !math.IsNaN(a) {
+		k++
+	}
 	if err != nil {
 		return
 	}
 
 	b, err = inp("b = ")
+	if !math.IsNaN(b) {
+		k++
+	}
 	if err != nil {
 		return
 	}
 
 	c, err = inp("c = ")
-	if err != nil {
+	if !math.IsNaN(c) {
+		k++
+	}
+	if err != nil || k >= 3 {
 		return
 	}
 
 	AB, err = inp("AB = ")
-	if err != nil {
+	if !math.IsNaN(AB) {
+		k++
+	}
+	if err != nil || k >= 3 {
 		return
 	}
 
 	AC, err = inp("AC = ")
-	if err != nil {
+	if !math.IsNaN(AC) {
+		k++
+	}
+	if err != nil || k >= 3 {
 		return
 	}
 
 	BC, err = inp("BC = ")
-	if err != nil {
+	if !math.IsNaN(BC) {
+		k++
+	}
+	if err != nil || k >= 3 {
 		return
 	}
 
@@ -76,14 +96,6 @@ func check(a, b, c, AB, AC, BC float64) error {
 	} else if n(AB)+n(AC)+n(BC) >= 180 {
 		return errors.New("no such triangle exists")
 
-	}
-
-	if !math.IsNaN(AB) && !math.IsNaN(AC) {
-		BC = 180 - AB - AC
-	} else if !math.IsNaN(AC) && !math.IsNaN(BC) {
-		AB = 180 - AC - BC
-	} else if !math.IsNaN(AB) && !math.IsNaN(BC) {
-		AC = 180 - AB - BC
 	}
 
 	if AC >= 90 && (b <= a || b <= c) {
@@ -131,11 +143,21 @@ func areaTWOAngle(AB, AC, a, S float64) float64 {
 }
 
 func area(a, b, c, AB, AC, BC float64) (S float64, err error) {
+	S = math.NaN()
+
+	if !math.IsNaN(AB) && !math.IsNaN(AC) && math.IsNaN(BC) {
+		BC = 180 - AB - AC
+	} else if !math.IsNaN(AC) && !math.IsNaN(BC) && math.IsNaN(AB) {
+		AB = 180 - AC - BC
+	} else if !math.IsNaN(AB) && !math.IsNaN(BC) && math.IsNaN(AC) {
+		AC = 180 - AB - BC
+	}
+
 	err = check(a, b, c, AB, AC, BC)
 	if err != nil {
 		return
 	}
-	S = math.NaN()
+
 	if !math.IsNaN(a) && !math.IsNaN(b) && !math.IsNaN(c) {
 		p := (a + b + c) / 2
 		return math.Sqrt(p * (p - a) * (p - b) * (p - c)), nil
@@ -161,8 +183,8 @@ func area(a, b, c, AB, AC, BC float64) (S float64, err error) {
 
 func main() {
 	a, b, c, AB, AC, BC, err := input()
-	exit := false
 
+	exit := false
 	for !exit {
 		exit = true
 		if err != nil {
@@ -176,8 +198,7 @@ func main() {
 	S, err := area(a, b, c, AB, AC, BC)
 	if err != nil {
 		fmt.Println("ERROR:", err)
-	}
-	if !math.IsNaN(S) {
+	} else if !math.IsNaN(S) {
 		fmt.Printf("Area ≈ %.18f", S)
 	} else {
 		fmt.Print("Unable to calculate area insufficient data")
