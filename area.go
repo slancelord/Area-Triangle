@@ -28,7 +28,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 
 	fmt.Println("If the side or angle is unknown, skip by writing `NaN`")
 
-	a, err = inp("a = ")
+	a, err = inp("side a = ")
 	if !math.IsNaN(a) {
 		k++
 	}
@@ -36,7 +36,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
-	b, err = inp("b = ")
+	b, err = inp("side b = ")
 	if !math.IsNaN(b) {
 		k++
 	}
@@ -44,7 +44,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
-	c, err = inp("c = ")
+	c, err = inp("side c = ")
 	if !math.IsNaN(c) {
 		k++
 	}
@@ -52,7 +52,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
-	AB, err = inp("AB = ")
+	AB, err = inp("angle AB = ")
 	if !math.IsNaN(AB) {
 		k++
 	}
@@ -60,7 +60,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
-	AC, err = inp("AC = ")
+	AC, err = inp("angle AC = ")
 	if !math.IsNaN(AC) {
 		k++
 	}
@@ -68,7 +68,7 @@ func input() (a, b, c, AB, AC, BC float64, err error) {
 		return
 	}
 
-	BC, err = inp("BC = ")
+	BC, err = inp("angle BC = ")
 	if !math.IsNaN(BC) {
 		k++
 	}
