@@ -16,9 +16,8 @@ func equals(numA, numB float64) bool {
 	}
 
 	const eps = 1e-5
-	delta := math.Abs(numA - numB)
-	return delta < eps
 
+	return math.Abs(numA-numB) < eps
 }
 func TestArea_Table(tst *testing.T) {
 	tests := []struct {
